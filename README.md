@@ -2,7 +2,6 @@
 
 This is the jekyll source for our blog. You can browse it on https://telekom-security.github.io.
 
-
 ## Development Usage
 
 ### Local (Ruby required)
