@@ -2,7 +2,7 @@
 title: 'From Dropbox to Violet RAT v5: A Multi-Stage WebDAV Delivery Chain'
 header: 'From Dropbox to Violet RAT v5: A Multi-Stage WebDAV Delivery Chain'
 og_description: 'Telekom Security has tracked the activity we call Rodent Weed across multiple phishing campaigns, and we document it whenever the picture shifts. This time the delivery chain remained familiar, but the payload was new, a Violet RAT v5, and we walk the full path from the first Dropbox link to the C2 beacon.'
-tags: ['threat-intelligence']
+tags: ['ThreatIntel']
 classification: 'TLP:CLEAR'
 report_date: 'July 2026'
 malware_type: 'Remote Access Trojan delivered via multi-stage phishing chain'
