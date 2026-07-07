@@ -1,0 +1,27 @@
+ioc;type;description
+91.219.238.140;ip;C2 IP
+7000;port;C2 Port
+dropbox.com/scl/fi/rictefq1kw3lam7yvm8vz/Telekom_3426503572.zip;url;Delivery domain 
+move-friendly-international-observed.trycloudflare.com;url;Delivery domain 
+violetrat.net;url;Vendor site
+violetsoftware.net;url;Vendor site
+t.me/+Eou1LIELd0hmZDJh;url;Violet Software Telegram
+move-friendly-international-observed.trycloudflare.com/files.zip;url;Payload download
+www.python.org/ftp/python/3.11.8/python-3.11.8-embed-amd64.zip;url;Python download
+Telekom_3426503572.pdf.zip;filename;Delivery archive
+Telekom_3426503572.url;filename;URL shortcut
+DKM_00KS0095283.PDF.lnk;filename;Fake PDF LNK
+ba21ce348f8efda5a17fe7d52c123f4a272534b848f90dd12e702410bc0266d4;SHA256;Telekom_3426503572.pdf.zip
+500ce5d0604f42137795bed1a03837e9fab1055c8db0b6ea5d7c6d64c5aa633a;SHA256;Telekom_3426503572.url
+da55783ca9c4098e5ea47e33507bd38ae9851b6617b574d1fa294a6205cb143e;SHA256;DKM_00KS0095283.PDF.lnk
+e57fa4c2b241a133e349758630f3fc0b9dae8055268452d9b28c98638894ffea;SHA256;oa.wsh
+0ddf4cfc3227294b849819d354479fcac848d85e881ae20014608554caf10cd9;SHA256;ccv.js
+a78b29252a7954b588392b952b970da7ddb760cec7320ac4e8a50f79a8cf8f9b;SHA256;final.bat
+717bb7be812fe4f57d4b7f1add1654b8a2dfb6063bd616cc26748039f247c43f;SHA256;add_to_startup.bat
+4a510219ffc0f5bc4acdf6e33d80d85d88155d88049cedaa00aaa9eed8051a3f;SHA256;encrypted_loader.py
+869b721401fd595867ea3320a2709d100751f8f9d25f8a59cc28af7169325131;SHA256;as_encrypted.bin
+0c775d9263fff22c04d75d12b0a5d1a5b73c5a787a7dcdd34fabccdf9e0a0fe5;SHA256;as_key.bin
+a9ebfd647cb5930c3a19c3fd66f103c06019f43aa53b8d309d31682514a9cd60;SHA256;files.zip
+978a54a42629e0d19ef41bd5db7e560d618e1fdcc8e77c14694642840dfad8a2;SHA256;as.dll
+f79b8924f58b1e98d221dfde52c4b1572dba251bbe65cd8bd44d342d70766a88;SHA256;payload.dat
+b0e033b35c17643a1d5a99b09cc43a9f0b83ab9c1ad0369f0e98f0745768ff87;SHA256;CryptoLoader.lnk
