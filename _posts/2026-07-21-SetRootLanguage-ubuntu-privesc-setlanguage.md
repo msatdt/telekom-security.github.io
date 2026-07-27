@@ -34,7 +34,7 @@ The following table lists the affected Ubuntu distributions as of the coordinate
 ### Fix and mitigation {#mitigation}
 
 Canonical published Ubuntu Security Notices covering all affected releases on 2026-07-21:
-- [USN-8580-1](https://ubuntu.com/security/notices/USN-8580-1): Ubuntu 26.10, 25.10, 24.04 LTS, 22.04 LTS
+- [USN-8580-1](https://ubuntu.com/security/notices/USN-8580-1): Ubuntu 26.10, 26.04, 24.04 LTS, 22.04 LTS
 - [USN-8580-2](https://ubuntu.com/security/notices/USN-8580-2): Ubuntu 20.04 LTS, 18.04 LTS, 16.04 LTS, 14.04 LTS (requires Ubuntu Pro)
 
 Apply the available security updates immediately:
