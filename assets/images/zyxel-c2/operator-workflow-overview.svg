@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 670" role="img" aria-labelledby="title desc">
+  <title id="title">Operator workflow overview</title>
+  <desc id="desc">Schematic workflow showing payload preparation, short-token delivery, a compromised Zyxel device, and backend roles observed in the exposed dump.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7fafc"/>
+      <stop offset="1" stop-color="#eef4f7"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-20%" width="130%" height="145%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#31424f" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f6f7e"/>
+    </marker>
+    <style>
+      .title { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #152330; }
+      .subtitle { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; fill: #53616c; }
+      .section-title { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 700; fill: #1c2b36; }
+      .card-title { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #18242f; }
+      .card-copy { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px; fill: #4c5a65; }
+      .mono { font-family: "SFMono-Regular", "Cascadia Mono", Consolas, monospace; font-size: 13px; fill: #27323a; }
+      .small { font-family: Aptos, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12px; fill: #6a7780; }
+      .card { fill: #ffffff; stroke: #d7e0e6; stroke-width: 1.2; filter: url(#softShadow); }
+      .group { fill: rgba(255,255,255,0.78); stroke: #cbd8df; stroke-width: 1.4; }
+      .arrow { fill: none; stroke: #2f6f7e; stroke-width: 3; stroke-linecap: round; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1200" height="670" rx="26" fill="url(#background)"/>
+  <text class="title" x="60" y="72">Operator workflow overview</text>
+  <text class="subtitle" x="62" y="100">Schematic reconstruction from compromised-device evidence and the exposed backend environment.</text>
+
+  <g transform="translate(70 145)">
+    <rect class="card" width="250" height="132" rx="16"/>
+    <rect width="8" height="96" x="22" y="18" rx="4" fill="#d8576b"/>
+    <text class="card-title" x="48" y="44">Payload preparation</text>
+    <text class="card-copy" x="48" y="72">Generated or staged</text>
+    <text class="mono" x="48" y="94">xbeacon MIPS payloads</text>
+    <text class="card-copy" x="48" y="116">with per-sample config</text>
+  </g>
+
+  <path class="arrow" d="M 330 211 L 360 211"/>
+
+  <g transform="translate(370 145)">
+    <rect class="card" width="250" height="132" rx="16"/>
+    <rect width="8" height="96" x="22" y="18" rx="4" fill="#158ea0"/>
+    <text class="card-title" x="48" y="44">Short-token delivery</text>
+    <text class="mono" x="48" y="72">hqsz* / /mips</text>
+    <text class="card-copy" x="48" y="96">HTTP staging paths</text>
+    <text class="card-copy" x="48" y="118">and decoded C2 config</text>
+  </g>
+
+  <path class="arrow" d="M 630 211 L 660 211"/>
+
+  <g transform="translate(670 145)">
+    <rect class="card" width="270" height="132" rx="16"/>
+    <rect width="8" height="96" x="22" y="18" rx="4" fill="#eba73d"/>
+    <text class="card-title" x="48" y="44">Compromised Zyxel</text>
+    <text class="mono" x="48" y="72">MIPS implant runtime</text>
+    <text class="card-copy" x="48" y="96">web-launched stagers,</text>
+    <text class="card-copy" x="48" y="118">memory and scan evidence</text>
+  </g>
+
+  <path class="arrow" d="M 805 286 C 805 314 805 326 805 345"/>
+  <text class="small" x="826" y="324">check-ins, tasks, uploads, and runtime links</text>
+
+  <g transform="translate(70 350)">
+    <rect class="group" width="1060" height="290" rx="20"/>
+    <text class="section-title" x="34" y="42">Backend workflow observed in the exposed dump</text>
+
+    <g transform="translate(35 100)">
+      <rect class="card" width="190" height="100" rx="14"/>
+      <circle cx="26" cy="30" r="9" fill="#d8576b"/>
+      <text class="card-title" x="44" y="36">Client inventory</text>
+      <text class="mono" x="22" y="65">xserver/.bdb</text>
+      <text class="mono" x="22" y="84">move/c2old/.bdb</text>
+    </g>
+
+    <g transform="translate(240 100)">
+      <rect class="card" width="190" height="100" rx="14"/>
+      <circle cx="26" cy="30" r="9" fill="#158ea0"/>
+      <text class="card-title" x="44" y="36">Listener state</text>
+      <text class="mono" x="22" y="65">xserver/.cdb</text>
+      <text class="mono" x="22" y="84">xserver/ts :8888</text>
+    </g>
+
+    <g transform="translate(445 100)">
+      <rect class="card" width="190" height="100" rx="14"/>
+      <circle cx="26" cy="30" r="9" fill="#6d7ed5"/>
+      <text class="card-title" x="44" y="36">Tasking/results</text>
+      <text class="mono" x="22" y="65">move/es_new</text>
+      <text class="mono" x="22" y="84">task_results</text>
+    </g>
+
+    <g transform="translate(650 100)">
+      <rect class="card" width="190" height="100" rx="14"/>
+      <circle cx="26" cy="30" r="9" fill="#4b9a63"/>
+      <text class="card-title" x="44" y="36">LAN scanning</text>
+      <text class="mono" x="22" y="65">gogo.sh</text>
+      <text class="mono" x="22" y="84">gogo_linux_mips</text>
+    </g>
+
+    <g transform="translate(855 100)">
+      <rect class="card" width="170" height="100" rx="14"/>
+      <circle cx="26" cy="30" r="9" fill="#bf6f46"/>
+      <text class="card-title" x="44" y="36">Proxy runtime</text>
+      <text class="card-copy" x="22" y="65">WSS / SSH reverse</text>
+      <text class="card-copy" x="22" y="84">proxy behavior</text>
+    </g>
+  </g>
+</svg>

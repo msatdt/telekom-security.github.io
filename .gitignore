@@ -64,3 +64,6 @@ build-iPhoneSimulator/
 *.css.map
 
 # End of https://www.gitignore.io/api/sass,ruby,jekyll
+
+### macOS ###
+.DS_Store
