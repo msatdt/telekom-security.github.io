@@ -12,7 +12,7 @@ cve: ['CVE-2026-54228', 'CVE-2026-54229', 'CVE-2026-54230', 'CVE-2026-54231']
 
 A chain of five bugs in ABRT allows any unprivileged local user to write attacker-controlled content into the root crontab, resulting in arbitrary command execution as root.
 We call the vulnerability chain "ABRTraryRoot" because it abuses ABRT's crash handling pipeline to achieve arbitrary root code execution. The full chain requires no user interaction beyond triggering a crash and runs in under 90 seconds, with the majority of that time just waiting for `crond` to execute the planted payload.
-This blog post is a continuation of our previous research on local privilege escalation vulnerabilities in userland applications on Linux-based operating systems.
+This blog post is a continuation of our previous research on local privilege escalation vulnerabilities in userland applications on Linux-based operating systems ([Pack2TheRoot]({% link _posts/2026-04-22-pack2theroot-linux-local-privilege-escalation.md %}) and [SetRootLanguage]({% link _posts/2026-07-21-SetRootLanguage-ubuntu-privesc-setlanguage.md %})).
 <!--more-->
 The discovery is the result of targeted research into ABRT's crash handling pipeline and its interaction with D-Bus APIs. The vulnerabilities were responsibly disclosed to Red Hat and assigned CVE IDs to them.
 Red Hat has acknowledged the vulnerabilities and published updates for supported Fedora releases on 2026-08-03.
